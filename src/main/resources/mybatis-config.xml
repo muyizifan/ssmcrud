@@ -1,32 +1,12 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd
-       http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx.xsd">
-    <!--Spring的配置文件，这里主要配置和业务逻辑有关的-->
-    <!--数据源，事务控制，xxx-->
-
-    <context:component-scan base-package="org.muizifan">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
-    <!-- 配置数据库相关参数properties的属性：${url} -->
-    <context:property-placeholder location="classpath:dbconfig.properties"/>
-    <bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
-        <property name="driverClass" value="${jdbc.driverClass}"></property>
-        <property name="user" value="${jdbc.user}"></property>
-        <property name="password" value="${jdbc.password}"></property>
-    </bean>
-
-    <!--配置和MyBatis的整合-->
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <!--指定mybatis全局配置文件的位置-->
-        <property name="configLocation" value=""></property>
-    </bean>
-</beans>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <typeAliases>
+        <package name="org.muizifan.crud.bean"/>
+    </typeAliases>
+</configuration>
