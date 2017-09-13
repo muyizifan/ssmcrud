@@ -4,7 +4,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.muizifan.crud.bean.Employee;
 import org.muizifan.crud.bean.EmployeeExample;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface EmployeeMapper {
     int countByExample(EmployeeExample example);
 

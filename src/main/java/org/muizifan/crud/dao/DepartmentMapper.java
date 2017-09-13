@@ -4,7 +4,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.muizifan.crud.bean.Department;
 import org.muizifan.crud.bean.DepartmentExample;
-
+import org.springframework.stereotype.Repository;
+@Repository
 public interface DepartmentMapper {
     int countByExample(DepartmentExample example);
 

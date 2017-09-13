@@ -32,12 +32,6 @@
           <version>2.5</version>
           <scope>provided</scope>
       </dependency>
-      <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
       <!--SpringMVC、Spring-->
       <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
       <dependency>
@@ -51,6 +45,12 @@
           <groupId>org.springframework</groupId>
           <artifactId>spring-jdbc</artifactId>
           <version>4.3.10.RELEASE</version>
+      </dependency>
+      <!--spring单元测试-->
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-test</artifactId>
+          <version>4.3.5.RELEASE</version>
       </dependency>
       <!--spring面向切面编程-->
       <!-- https://mvnrepository.com/artifact/org.springframework/spring-aspects -->
@@ -85,6 +85,11 @@
           <groupId>mysql</groupId>
           <artifactId>mysql-connector-java</artifactId>
           <version>5.1.41</version>
+      </dependency>
+      <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.12</version>
       </dependency>
 
   </dependencies>
