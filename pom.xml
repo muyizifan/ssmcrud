@@ -27,7 +27,7 @@
       <!--jstl，servlet-api，junit-->
       <!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl -->
       <dependency>
-          <groupId>javax.servlet.jsp.jstl</groupId>
+          <groupId>javax.servlet</groupId>
           <artifactId>jstl</artifactId>
           <version>1.2</version>
       </dependency>
