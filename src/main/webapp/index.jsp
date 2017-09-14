@@ -67,11 +67,11 @@
     <%--显示分页信息--%>
     <div class="row">
         <%--分页文字信息--%>
-        <div class="col-lg-6">
-            当前页,总页,总共条记录
+        <div class="col-md-6" id="page_info_area">
+
         </div>
         <%--分页信息条--%>
-        <div class="col-lg-6">
+        <div class="col-md-6" id="page_nav_area">
 
         </div>
     </div>
@@ -88,6 +88,9 @@
                //1.解析并显示员工数据
                build_emp_table(result);
                //2.解析并显示分页信息
+               build_page_info(result);
+               //3.解析显示分页条数据
+               build_page_nav(result);
            }
        });
     });
@@ -122,8 +125,26 @@
                .appendTo("#emps_table tbody");
         });
     }
+    //解析显示分页信息
+    function build_page_info(result) {
+        $("#page_info_area").append("当前"+result.extend.pageInfo.pageNum+"页,总共"+result.extend.pageInfo.pages+"页,总"+result.extend.pageInfo.total+"共条记录");
+    }
+    //解析显示分页条,点击分页要能去下一页
     function build_page_nav(result) {
-        
+        var ul=$("<ul></ul>").addClass("pagination");
+        var firstPageLi=$("<li></li>").append($("<a></a>").append("首页").attr("href","#"));
+        var prePageLi=$("<li></li>").append($("<a></a>").append("&laquo;"));
+        ul.append(firstPageLi).append(prePageLi);
+        //1,2,3,4,5
+        $.each(result.extend.pageInfo.navigatepageNums,function (index,item) {
+            var numLi=$("<li></li>").append($("<a></a>").append(item));
+            ul.append(numLi);
+        })
+        var nextPageLi=$("<li></li>").append($("<a></a>").append("&raquo;"));
+        var lastPageLi=$("<li></li>").append($("<a></a>").append("末页").attr("href","#"));
+        ul.append(nextPageLi).append(lastPageLi);
+        var navLi=$("<nav></nav>").append(ul);
+        $("#page_nav_area").append(navLi);
     }
 </script>
 </body>
