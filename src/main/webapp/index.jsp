@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+
 <%--
   Created by IntelliJ IDEA.
   User: tao
@@ -21,6 +24,8 @@
 </body>
 </html>
 -->
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-        pageEncoding="UTF-8"%>
+<html>
+<body>
 <jsp:forward page="/emps"></jsp:forward>
+</body>
+</html>
