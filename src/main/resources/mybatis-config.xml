@@ -11,5 +11,10 @@
         <package name="org.muizifan.crud.bean"/>
     </typeAliases>
 
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+        </plugin>
+    </plugins>
+
 </configuration>
 
