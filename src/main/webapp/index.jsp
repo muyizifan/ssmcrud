@@ -67,7 +67,7 @@
                             <label class="col-sm-2 control-label">deptName</label>
                             <div class="col-sm-4">
                                 <%--部门提交部门id--%>
-                                <select class="form-control" name="dId">
+                                <select class="form-control" name="dId" id="dept_add_select">
                                 </select>
                             </div>
                         </div>
@@ -249,10 +249,32 @@
         }
 
         $("#emp_add_modal_btn").click(function () {
+            //发送ajax请求，查出部门信息，显示在下拉列表中
+            getDepts();
+            //点击新增按钮弹出模态框
             $('#empAddModal').modal({
                 backdrop:"static"
             });
         });
+
+        //查询所有的部门信息并显示在下拉列表中
+        function getDepts() {
+            $.ajax({
+                url:"${APP_PATH}/depts",
+                type:"get",
+                success:function (result) {
+                    //console.log(result);
+
+                    //显示部门信息在下拉列表中
+                    //$("#dept_add_select")
+                    //$("#empAddModal select").append("")
+                    $.each(result.extend.depts,function () {
+                       var optionEle=$("<option></option>").append(this.deptName).attr("value",this.deptId);
+                       optionEle.appendTo("#empAddModal select");
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>
