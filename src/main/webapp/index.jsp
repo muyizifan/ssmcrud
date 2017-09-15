@@ -41,15 +41,15 @@
                 <div class="modal-body">
                     <form class="form-horizontal">
                         <div class="form-group">
-                            <label for="empName_add_input" name="empName" class="col-sm-2 control-label">empName</label>
+                            <label for="empName_add_input"  class="col-sm-2 control-label">empName</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="empName_add_input" placeholder="empName">
+                                <input type="text" name="empName" class="form-control" id="empName_add_input" placeholder="empName">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="email_add_input" name="email" class="col-sm-2 control-label">email</label>
+                            <label for="email_add_input"  class="col-sm-2 control-label">email</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="email_add_input" placeholder="email@qq.com">
+                                <input type="text" name="email" class="form-control" id="email_add_input" placeholder="email@qq.com">
                             </div>
                         </div>
                         <div class="form-group">
@@ -75,7 +75,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary">提交</button>
+                    <button type="button" class="btn btn-primary" id="emp_save_btn">保存</button>
                 </div>
             </div>
         </div>
@@ -93,7 +93,7 @@
         <div class="row">
             <div class="col-md-4 col-md-offset-8">
                 <button class="btn btn-primary" id="emp_add_modal_btn">新增</button>
-                <button class="btn btn-danger">删除</button>
+                <button class="btn btn-danger" >删除</button>
             </div>
         </div>
         <%--显示表格数据--%>
@@ -129,6 +129,8 @@
         </div>
     </div>
     <script type="text/javascript">
+
+        var totalRecord;
         //1.页面加载完成以后，直接去发送一个ajax请求，要到分页数据
         $(function () {
             //去首页
@@ -191,6 +193,7 @@
         function build_page_info(result) {
             $("#page_info_area").empty();
             $("#page_info_area").append("当前"+result.extend.pageInfo.pageNum+"页,总共"+result.extend.pageInfo.pages+"页,总"+result.extend.pageInfo.total+"共条记录");
+            totalRecord=result.extend.pageInfo.total;
         }
 
         //解析显示分页条,点击分页要能去下一页
@@ -275,6 +278,26 @@
                 }
             });
         }
+
+        $("#emp_save_btn").click(function () {
+            //1.模态框中填写的表单数据提交给服务器进行保存
+            //2.发送ajax请求保存员工
+            $.ajax({
+                url:"${APP_PATH}/emp",
+                type:"POST",
+                data:$("#empAddModal form").serialize(),
+                success:function (result) {
+                    //alert(result.msg);
+                    //员工保存成功
+                    //1.关闭模态框
+                    $("#empAddModal").modal("hide");
+                    //2.来到最后一页，显示最新数据
+                    //发送ajax请求显示最后一页数据即可
+                    //
+                    to_page(totalRecord);
+                }
+            })
+        });
     </script>
 </body>
 </html>
