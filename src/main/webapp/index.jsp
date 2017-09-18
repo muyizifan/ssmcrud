@@ -253,10 +253,18 @@
                 $("#page_nav_area").append(navLi);
         }
 
+        //清空表单样式及内容
+        function reset_form(ele) {
+            $(ele)[0].reset();
+            //清空表单样式
+            $(ele).find("*").removeClass("has-error has-success");
+            $(ele).find(".help-block").text("");
+        }
         //点击新增按钮弹出模态框
         $("#emp_add_modal_btn").click(function () {
-            //清除表单数据(表单重置)
-            $("#empAddModal form")[0].reset();
+            //清除表单数据(表单完整重置(数据和样式))
+            reset_form("#empAddModal form");
+           // $("#empAddModal form")[0].reset();
             //发送ajax请求，查出部门信息，显示在下拉列表中
             getDepts();
             //点击新增按钮弹出模态框
@@ -342,7 +350,7 @@
                         show_validate_msg($("#empName_add_input"),"success","用户名可用");
                         $("#emp_save_btn").attr("ajax-va","success");
                     }else {
-                        show_validate_msg($("#empName_add_input"),"error","用户名不可用");
+                        show_validate_msg($("#empName_add_input"),"error",result.extend.va_msg);
                         $("#emp_save_btn").attr("ajax-va","error");
                     }
                 }
