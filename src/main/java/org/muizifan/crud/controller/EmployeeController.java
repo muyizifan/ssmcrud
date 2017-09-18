@@ -25,6 +25,22 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    /**
+     * 检查用户名是否可用
+     * @param empName
+     * @return
+     */
+    @RequestMapping("/checkuser")
+    @ResponseBody
+    public Msg checkuse(@RequestParam("empName") String empName){
+        boolean b= employeeService.checkUser(empName);
+        if(b){
+            return Msg.success();
+        }else {
+            return Msg.fail();
+        }
+    }
+
     @RequestMapping(value = "/emp",method = RequestMethod.POST)
     @ResponseBody
     public Msg saveEmp(Employee employee){

@@ -253,7 +253,10 @@
                 $("#page_nav_area").append(navLi);
         }
 
+        //点击新增按钮弹出模态框
         $("#emp_add_modal_btn").click(function () {
+            //清除表单数据(表单重置)
+            $("#empAddModal form")[0].reset();
             //发送ajax请求，查出部门信息，显示在下拉列表中
             getDepts();
             //点击新增按钮弹出模态框
@@ -314,17 +317,38 @@
 
         //显示校验结果的提示信息
         function show_validate_msg(ele,status,msg){
-            //清除当前元素校验的状态
+            //清除当前元素的校验状态
             $(ele).parent().removeClass("has-success has-error");
             $(ele).next("span").text("");
-            if ("success"==status){
+            if("success"==status){
                 $(ele).parent().addClass("has-success");
                 $(ele).next("span").text(msg);
-            }else if("error"==status){
+            }else if("error" == status){
                 $(ele).parent().addClass("has-error");
                 $(ele).next("span").text(msg);
             }
         }
+
+        //校验用户名是否可用
+        $("#empName_add_input").change(function () {
+           //发送ajax请求校验用户名是否可用
+            var empName=this.value;
+            $.ajax({
+                url:"${APP_PATH}/checkuser",
+                data:"empName="+empName,
+                type:"POST",
+                success:function (result) {
+                    if(result.code==100){
+                        show_validate_msg($("#empName_add_input"),"success","用户名可用");
+                        $("#emp_save_btn").attr("ajax-va","success");
+                    }else {
+                        show_validate_msg($("#empName_add_input"),"error","用户名不可用");
+                        $("#emp_save_btn").attr("ajax-va","error");
+                    }
+                }
+            });
+        });
+
         //点击保存，保存员工
         $("#emp_save_btn").click(function () {
             //1.模态框中填写的表单数据提交给服务器进行保存
@@ -332,6 +356,10 @@
             if(!validate_add_form()){
                 return false;
             };
+            //1、判断之前的ajax用户名校验是否成功。如果成功。
+            if($(this).attr("ajax-va")=="error"){
+                return false;
+            }
             //2.发送ajax请求保存员工
             $.ajax({
                 url:"${APP_PATH}/emp",
@@ -347,7 +375,7 @@
                     //
                     to_page(totalRecord);
                 }
-            })
+            });
         });
     </script>
 </body>
