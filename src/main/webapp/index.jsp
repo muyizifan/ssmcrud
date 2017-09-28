@@ -42,8 +42,7 @@
                         <div class="form-group">
                             <label for="empName_add_input"  class="col-sm-2 control-label">empName</label>
                             <div class="col-sm-10">
-                                <input type="text" name="empName" class="form-control" id="empName_update_input" placeholder="empName">
-                                <span class="help-block"></span>
+                                <p class="form-control-static" id="empName_update_static"></p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -229,6 +228,8 @@
                 var editBtn=$("<button></button>").addClass("btn btn-primary btn-sm edit_btn")
                     .append($("<span></span>").addClass("glyphicon glyphicon-pencil"))
                     .append("编辑");
+                //为编辑按钮添加一个自定义的属性，来表示当前员工id
+                editBtn.attr("edit-id",item.empId);
                 var delBtn=$("<button></button>").addClass("btn btn-danger btn-sm delete_btn")
                     .append($("<span></span>").addClass("glyphicon glyphicon-remove"))
                     .append("删除");
@@ -464,15 +465,32 @@
         //1.我们是按钮创建之前就绑定了click.所以绑定不上，
         //1）可以在创建按钮的时候绑定，2）绑定点击，live()
         //jQuery新版没有live，使用on进行替代
-        $(document).on("click","edit_btn",function(){
+        $(document).on("click",".edit_btn",function(){
             //alert("success");
-            //0.查出员工信息，显示员工信息
+
             //1.查出部门信息，并显示部门列表
-            getDepts("#empUpdateModal select")
-            $('#empUpdateModal').modal({
+            getDepts("#empUpdateModal select");
+            //2.查出员工信息，显示员工信息
+            getEmp($(this).attr("edit-id"));
+            $("#empUpdateModal").modal({
                 backdrop:"static"
             });
         });
+
+        function getEmp(id) {
+            $.ajax({
+                url:"${APP_PATH}/emp/"+id,
+                type:"GET",
+                success:function(resulet){
+                    console.log(resulet);
+                    var empData=resulet.extend.emp;
+                    $("#empName_update_static").text(empData.empName);
+                    $("#email_update_input").val(empData.email);
+                    $("#empUpdateModal input[name=gender]").val([empData.gender]);
+                    $("#empUpdateModal select").val([empData.dId]);
+                }
+            })
+        }
     </script>
 </body>
 </html>
