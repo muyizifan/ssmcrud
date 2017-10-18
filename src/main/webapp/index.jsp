@@ -184,7 +184,7 @@
     </div>
     <script type="text/javascript">
 
-        var totalRecord;
+        var totalRecord,currentPage;
         //1.页面加载完成以后，直接去发送一个ajax请求，要到分页数据
         $(function () {
             //去首页
@@ -233,6 +233,8 @@
                 var delBtn=$("<button></button>").addClass("btn btn-danger btn-sm delete_btn")
                     .append($("<span></span>").addClass("glyphicon glyphicon-remove"))
                     .append("删除");
+                //为删除按钮添加一个自定义的属性，来表示当前删除的员工id
+                delBtn.attr("del-id",item.empId);
                 var btnTd=$("<td></td>").append(editBtn).append(" ").append(delBtn);
                 //append方法执行完成以后还是返回原来的元素
                $("<tr></tr>").append(empIdTd)
@@ -250,6 +252,7 @@
             $("#page_info_area").empty();
             $("#page_info_area").append("当前"+result.extend.pageInfo.pageNum+"页,总共"+result.extend.pageInfo.pages+"页,总"+result.extend.pageInfo.total+"共条记录");
             totalRecord=result.extend.pageInfo.total;
+            currentPage=result.extend.pageInfo.pageNum;
         }
 
         //解析显示分页条,点击分页要能去下一页
@@ -462,6 +465,8 @@
             });
         });
 
+
+
         //1.我们是按钮创建之前就绑定了click.所以绑定不上，
         //1）可以在创建按钮的时候绑定，2）绑定点击，live()
         //jQuery新版没有live，使用on进行替代
@@ -472,6 +477,8 @@
             getDepts("#empUpdateModal select");
             //2.查出员工信息，显示员工信息
             getEmp($(this).attr("edit-id"));
+            //3.把员工的id传递给模态框的更新按钮
+            $("#emp_update_btn").attr("edit-id",$(this).attr("edit-id"));
             $("#empUpdateModal").modal({
                 backdrop:"static"
             });
@@ -491,6 +498,58 @@
                 }
             })
         }
+        //点击更新，更新员工信息
+        $("#emp_update_btn").click(function(){
+            //验证邮箱是否合法
+            //1、校验邮箱信息
+            var email=$("#email_update_input").val();
+            var regEmail=/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+            if(!regEmail.test(email)){
+                //alert("邮箱格式不正确");
+                //应该清空这个元素之前的样式
+                show_validate_msg($("#email_update_input"),"error","邮箱格式不正确");
+                return false;
+            }else {
+                show_validate_msg($("#email_update_input"),"success","");
+            };
+            //2、发送ajax请求保存员工数据
+            $.ajax({
+                url:"${APP_PATH}/emp/"+$(this).attr("edit-id"),
+                /*
+                type:"POST",
+                data:$("#email_update_input form").serialize()+"&_method=PUT",
+                */
+                type:"PUT",
+                data:$("#empUpdateModal form").serialize(),
+                success:function(result){
+                    //alert(result.msg);
+                    //1.关闭对话框
+                    $("#empUpdateModal").modal("hide");
+                    //2.回到本页面
+                    to_page(currentPage);
+                }
+            })
+        })
+
+        //单个删除
+        $(document).on("click","delete_btn",function(){
+            //1.弹出是否确认删除对话框
+            //alert($(this).parent("tr").find("td:eq(1)").text())
+            var empName=$(this).parent("tr").find("td:eq(1)").text();
+            var empId=$(this).attr("del-id");
+            if(confirm("确认删除【"+empName+"】吗？")){
+                //确认，发送ajax请求删除即可
+                $.ajax({
+                    u rl:"${APP_PATH}/emp/"+empId,
+                    type:"DELETE",
+                    success:function(result){
+                        alert(result.msg)
+                        //回到本页
+                        to_page(currentPage);
+                    }
+                })
+            }
+        });
     </script>
 </body>
 </html>
